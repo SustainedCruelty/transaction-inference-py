@@ -39,6 +39,7 @@ def stmt_create_updates_table() -> str:
         REGIONID BIGINT,
         LOCATIONID BIGINT,
         SYSTEMID INTEGER,
+        NEWPRICE DECIMAL(20, 2),
         AMOUNT DECIMAL(20, 2),
         ISBUY BOOLEAN,
         TIMESTAMP BIGINT
@@ -162,6 +163,7 @@ def stmt_infer_updates(region: int, ts: int) -> str:
         {region} AS REGIONID,
         t1.location_id AS LOCATIONID,
         t1.system_id AS SYSTEMID,
+        t2.price AS NEWPRICE,
         (t1.price - t2.price) AS AMOUNT,
         t1.is_buy_order AS ISBUY,
         {ts} AS TIMESTAMP
@@ -193,7 +195,7 @@ logging.basicConfig(level=logging.INFO, format=log_format)
 
 BASE_URL = 'https://esi.evetech.net/latest/markets/%d/orders/?datasource=tranquility&order_type=all&page=%d'
 DATE_FORMAT = "%a, %d %b %Y %H:%M:%S GMT"
-regions = [10000030]
+regions = [10000043]
 
 orderbooks_fetched, etags_per_page = {}, {}
 region_requests = PriorityQueue()
